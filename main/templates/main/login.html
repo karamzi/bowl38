@@ -1,0 +1,38 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/login.css' %}{% endblock %}
+{% block title %}Авторизация{% endblock %}
+{% block title1 %}Авторизация{% endblock %}
+
+{% block content %}
+<section class="section_login">
+    <div class="container">
+        <div class="login-page">
+            <div class="form">
+                {% if form.non_field_errors %}
+                <ul>
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error|escape }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message|escape }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <form class="login-form" method="POST">
+                    {% csrf_token %}
+                    {{ form.username }}
+                    {{ form.password }}
+                    <input type="hidden" name="next" value="{% url 'main:index' %}">
+                    <button>login</button>
+                    <p class="message">Не зарегестрированны? <a href="{% url 'main:registrations' %}">Создайте аккаунт!</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

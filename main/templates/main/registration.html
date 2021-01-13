@@ -1,0 +1,28 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/registration.css' %}{% endblock %}
+{% block title %}Регистрация{% endblock %}
+{% block title1 %}Регистрация{% endblock %}
+
+{% block content %}
+<section class="section_registration">
+    <div class="container">
+        <div class="registration_page">
+            <div class="form">
+                <form class="registration_form" method="POST">
+                    {% csrf_token %}
+                    {{ form.username }}
+                    {{ form.first_name }}
+                    {{ form.last_name }}
+                    {{ form.password1 }}
+                    {{ form.password2 }}
+                    {{ form.errors.username }}
+                    {{ form.errors.password2 }}
+                    <button>Зарегистрироваться</button>
+                    <p class="message">Зарегистрированны? <a href="{% url 'main:login' %}">Авторизуйтесь!</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

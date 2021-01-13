@@ -1,0 +1,31 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/club_300.css' %}{% endblock %}
+{% block title %}Клуб 300{% endblock %}
+{% block title1 %}Клуб 300{% endblock %}
+
+{% block content %}
+<section class="section_club_300">
+    <div class="container">
+        <div class="block_club_300">
+            <div class="club_300_cards">
+
+                <div class="club_300_card">
+                    <div class="club_300_img">
+                        <img src="{% static 'main/img/club_300/Evgeniy.jpg' %}" alt="Женя Рупасов">
+                    </div>
+                    <p>Рупасов Евгений</p>
+                </div>
+
+                <div class="club_300_card">
+                    <div class="club_300_img">
+                        <img src="{% static 'main/img/club_300/Boris.jpg' %}" alt="">
+                    </div>
+                    <p>Сафронович Борис</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

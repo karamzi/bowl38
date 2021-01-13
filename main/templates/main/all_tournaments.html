@@ -1,0 +1,53 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/all_tournaments.css' %}{% endblock %}
+{% block title %}Турниры{% endblock %}
+{% block title1 %}Турниры{% endblock %}
+
+{% block content %}
+<section class="section_tournaments">
+    <div class="container">
+        <div class="block_tournaments">
+            <div class="tournaments_cards">
+                {% if future_tournaments %}
+                <div class="future_tournament_title">
+                    <h3>Ближайщие турниры</h3>
+                </div>
+                {% for tournament in future_tournaments %}
+                <div class="tournaments">
+                    <a href="{% url 'main:current_tournament' tournament_id=tournament.pk %}" class="tournaments_link">{{ tournament.tittle }}</a>
+                    <h4>{{ tournament.description }}</h4>
+                    <p>{{ tournament.date }}</p>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% if past_tournaments %}
+                <div class="past_tournament_title">
+                    <h3>Прошедшие турниры</h3>
+                </div>
+                {% for tournament in past_tournaments %}
+                <div class="tournaments">
+                    <a href="{% url 'main:current_tournament' tournament_id=tournament.pk %}" class="tournaments_link">{{ tournament.tittle }}</a>
+                    <h4>{{ tournament.description }}</h4>
+                    <p>{{ tournament.date }}</p>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="tournament_pagination">
+                    {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                    {% endif %}
+                    {% if page_obj.has_previous or page_obj.has_next %}
+                    <a class="active" href="#">{{ page_obj.number }}</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

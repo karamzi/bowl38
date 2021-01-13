@@ -1,0 +1,36 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/all_news.css' %}{% endblock %}
+{% block title %}Новости{% endblock %}
+{% block title1 %}Новости{% endblock %}
+
+{% block content %}
+<section class="section_news">
+    <div class="container">
+        <div class="block_news">
+            <div class="news_cards">
+                {% for post in news_list %}
+                <div class="news">
+                    <a href="{% url 'main:current_news' post.pk %}" class="news_link">{{ post.title }}</a>
+                    <h4>{{ post.short_description }}</h4>
+                    <p>{{ post.date }}</p>
+                </div>
+                {% endfor %}
+                <div class="news_pagination">
+                    {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                    {% endif %}
+                    {% if page_obj.has_previous or page_obj.has_next %}
+                    <a class="active" href="#">{{ page_obj.number }}</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <link rel="icon" href="{% static 'main/img/logo.png' %}">
+    <title>Федерация Боулинга Братска</title>
+</head>
+<body>
+<div class="background"></div>
+<header>
+    <div class="container">
+        <div class="header">
+            <div class="logo"><a href="{% url 'main:index' %}"><img src="{% static 'main/img/logo.png' %}"
+                                                                    alt="Логтип федерации"></a></div>
+            <div class="menu">
+                <span class="burger"></span>
+            </div>
+            <nav>
+                <ul class="nav">
+                    <li><a class="nav-link" href="{% url 'main:index' %}">Главная</a></li>
+                    <li><a class="nav-link" href="#">Федерация</a>
+                        <div class="accordion">
+                            <a href="">О федерации</a>
+                            <a href="{% url 'main:all_news' %}">Новости</a>
+                        </div>
+                    </li>
+                    <li><a class="nav-link" href="{% url 'main:documents' %}">Документы</a></li>
+                    <li><a class="nav-link" href="#">Турниры</a>
+                        <div class="accordion">
+                            <a href="{% url 'main:all_tournaments' %}">Турниры</a>
+                            <a href="{% url 'main:calendar' %}">Календарь</a>
+                            <a href="{% url 'main:patterns' %}">Диаграммы</a>
+                        </div>
+                    </li>
+                    <li><a class="nav-link" href="{% url 'main:results' %}">Результаты</a></li>
+                    <li><a class="nav-link" href="{% url 'main:club_300' %}">Клуб 300</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main">
+            {% if not user.is_authenticated %}
+            <div class="login">
+                <a href="{% url 'main:login' %}">Авторизироваться</a>
+            </div>
+            {% else %}
+            <div class="user">
+                <p>{{ user.first_name }} {{ user.last_name }}</p>
+                <a href="{% url 'main:logout' %}" class="logout">Выйти</a>
+            </div>
+            {% endif %}
+            <div class="tittle">
+                <h1>Федерация боулинга</h1>
+                <h1>Братска</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% if tournaments %}
+<section class="section_tournaments">
+    <div class="container">
+        <div class="block_tournaments">
+
+            <div class="tournaments_title">Ближайщие турниры</div>
+
+            <div class="tournaments_cards">
+                {% for post in tournaments %}
+                <div class="tournaments_card">
+                    <div class="tournaments_head">
+                        <div class="tournaments_date">
+                            <p>{{ post.date|date:'j' }}</p>
+                            <p>{{ post.date|date:'E' }}</p>
+                        </div>
+                        <h2>{{ post.tittle }}</h2>
+                    </div>
+                    <div class="tournaments_content">
+                        <p>{{ post.description }}</p>
+                        {% if post.regulations %}
+                        <div class="regulations">
+                            <img src="{% static 'main/img/regulation.png' %}" alt="">
+                            <a target="_blank" href="{{ post.regulations.url }}">Регламент</a>
+                        </div>
+                        {% endif %}
+                        {% if post.pattern %}
+                        <div class="oil">
+                            <img src="{% static 'main/img/oil.png' %}" alt="">
+                            <p>Программа масла номер - {{ post.pattern }}</p>
+                        </div>
+                        {% endif %}
+                        <div class="online_registration">
+                            <a href="{% url 'main:current_tournament' tournament_id=post.pk %}">Страница турнира</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section_recent_results">
+    <div class="container">
+        <div class="block_recent_results">
+            <div class="recent_results_title">Прошедшие турниры</div>
+            <div class="recent_results_cards">
+                {% for result in last_results %}
+                <a href="{% url 'main:current_tournament' tournament_id=result.pk %}" class="recent_results_link">
+                    <div class="recent_results_card">
+                        <img src="{% static 'main/img/result_icon.png' %}" alt="Иконка документа" class="document_icon">
+                        <p class="recent_results_name">{{ result.tittle }}</p>
+                        <div class="recent_results_date">
+                            <img src="{% static 'main/img/calendar_icon.png' %}" alt="Календарь">
+                            <p>{{ result.date }}</p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section_news">
+    <div class="container">
+        <div class="block_news">
+            <div class="news_title">Новости</div>
+            <div class="news_cards">
+                {% for post in news %}
+                <a href="{% url 'main:current_news' post.pk %}" class="news_link">
+                    <div class="news_card">
+                        <div class="news_head">
+                            <div class="news_date">
+                                <p>{{ post.date|date:'j' }}</p>
+                                <p>{{ post.date|date:'E' }}</p>
+                            </div>
+                            <h2>{{ post.title }}</h2>
+                        </div>
+                        <div class="news_content">
+                            <p>{{ post.short_description }}</p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section_rating">
+    <div class="container">
+        <div class="block_rating">
+            <div class="rating_title">Рейтинг спортсменов</div>
+
+            <div class="rating_cards">
+
+                <div class="rating_card">
+                    <p class="rating_legue">Мастерс</p>
+                    <table class="table_col">
+                        <colgroup>
+                            <col style="background:#C7DAF0;">
+                        </colgroup>
+                        <tr>
+                            <th>Место</th>
+                            <th>Спортсмен</th>
+                            <th>Сумма очков</th>
+                        </tr>
+                        {% for player in masters %}
+                        <tr>
+                            <td>{{ player.place }}</td>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.score }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="rating_card">
+                    <p class="rating_legue">Лайт</p>
+                    <table class="table_col">
+                        <colgroup>
+                            <col style="background:#C7DAF0;">
+                        </colgroup>
+                        <tr>
+                            <th>Место</th>
+                            <th>Спортсмен</th>
+                            <th>Сумма очков</th>
+                        </tr>
+                        {% for player in light %}
+                        <tr>
+                            <td>{{ player.place }}</td>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.score }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="rating_card">
+                    <p class="rating_legue">Мужчины</p>
+                    <table class="table_col">
+                        <colgroup>
+                            <col style="background:#C7DAF0;">
+                        </colgroup>
+                        <tr>
+                            <th>Место</th>
+                            <th>Спортсмен</th>
+                            <th>Сумма очков</th>
+                        </tr>
+                        {% for player in man %}
+                        <tr>
+                            <td>{{ player.place }}</td>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.score }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <div class="rating_card">
+                    <p class="rating_legue">Женщины</p>
+                    <table class="table_col">
+                        <colgroup>
+                            <col style="background:#C7DAF0;">
+                        </colgroup>
+                        <tr>
+                            <th>Место</th>
+                            <th>Спортсмен</th>
+                            <th>Сумма очков</th>
+                        </tr>
+                        {% for player in women %}
+                        <tr>
+                            <td>{{ player.place }}</td>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.score }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+            </div>
+            <div class="rating_button">
+                <a href="">Посмотреть весь рейтинг</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section_contacts">
+    <div class="container">
+        <div class="block_contacts">
+            <div class="contacts_title">Наш адрес</div>
+            <div class="contacts_address">улица Комсомольская 37, ДЦ Формула</div>
+        </div>
+    </div>
+    <div class="block_map">
+        <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A73feec80fca9ff381df84700e4396240043a9944bab367e8f7d279c9e294ea44&amp;source=constructor"
+                width="100%" min-width="1170px" height="500" frameborder="0"></iframe>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="block_footer">
+            <div class="footer_title">
+                <p>© 2020, МСОО "Федерация боулинга г.Братска"</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="{% static 'main/JS/main.js' %}"></script>
+<script src="{% static 'main/JS/menu.js' %}"></script>
+</body>
+</html>

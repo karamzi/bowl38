@@ -1,0 +1,22 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/documents.css' %}{% endblock %}
+{% block title %}Документы{% endblock %}
+{% block title1 %}Документы{% endblock %}
+
+{% block content %}
+<section class="section_documents">
+    <div class="container">
+        <div class="block_documents">
+            <div class="documents_cards">
+                {% for document in documents %}
+                <div class="document">
+                    <img src="{% static 'main/img/pdf.png' %}" alt="PDF">
+                    <a target="_blank" href="{{ document.link }}" class="document_name">{{ document.name }}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" {% block viewport %}content="width=device-width, initial-scale=1"{% endblock %}>
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
+    <link rel="stylesheet" href="{% static 'main/css/magnific-popup.css' %}">
+    <link rel="icon" href="{% static 'main/img/logo.png' %}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="background"></div>
+<header>
+    <div class="container">
+        <div class="header">
+            <div class="logo"><a href="{% url 'main:index' %}"><img src="{% static 'main/img/logo.png' %}" alt="Логтип федерации"></a></div>
+             <div class="menu">
+                <span class="burger"></span>
+            </div>
+            <nav>
+                <ul class="nav">
+                    <li><a class="nav-link" href="{% url 'main:index' %}">Главная</a></li>
+                    <li><a class="nav-link" href="#">Федерация</a>
+                        <div class="accordion">
+                            <a href="">О федерации</a>
+                            <a href="{% url 'main:all_news' %}">Новости</a>
+                        </div>
+                    </li>
+                    <li><a class="nav-link" href="{% url 'main:documents' %}">Документы</a></li>
+                    <li><a class="nav-link" href="#">Турниры</a>
+                        <div class="accordion">
+                            <a href="{% url 'main:all_tournaments' %}">Турниры</a>
+                            <a href="{% url 'main:calendar' %}">Календарь</a>
+                            <a href="{% url 'main:patterns' %}">Диаграммы</a>
+                        </div>
+                    </li>
+                    <li><a class="nav-link" href="{% url 'main:results' %}">Результаты</a></li>
+                    <li><a class="nav-link" href="{% url 'main:club_300' %}">Клуб 300</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main">
+            {% if not user.is_authenticated %}
+            <div class="login">
+                <a href="{% url 'main:login' %}">Авторизироваться</a>
+            </div>
+            {% else %}
+            <div class="user">
+                <p>{{ user.first_name }} {{ user.last_name }}</p>
+                <a href="{% url 'main:logout' %}" class="logout">Выйти</a>
+            </div>
+            {% endif %}
+            <div class="tittle">
+                <h1>{% block title1 %}{% endblock %}</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% block content %}
+{% endblock %}
+
+<footer class="footer">
+    <div class="container">
+        <div class="block_footer">
+            <div class="footer_title">
+                <p>© 2020, МСОО "Федерация боулинга г.Братска"</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="{% static 'main/JS/main.js' %}"></script>
+<script src="{% static 'main/JS/menu.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/results.css' %}{% endblock %}
+{% block title %}Результаты{% endblock %}
+{% block title1 %}Результаты{% endblock %}
+
+{% block content %}
+<section class="section_results">
+    <div class="container">
+        <div class="block_results">
+            <div class="results_cards">
+                {% for result in results %}
+                <div class="results">
+                    <a target="_blank" href="{{ result.link }}">{{ result.name }}</a>
+                    <p>{{ result.date }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

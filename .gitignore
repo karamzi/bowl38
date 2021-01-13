@@ -1,0 +1,9 @@
+db.sqlite3
+fsbb/prod_settings.py
+*/__pycache__/*
+*.pyc
+*/migrations/*
+*/migrations
+media/*
+.DS_Store
+*/.DS_Store

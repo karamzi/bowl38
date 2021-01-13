@@ -1,0 +1,26 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block css %}{% static 'main/css/patterns.css' %}{% endblock %}
+{% block title %}Диаграммы масла{% endblock %}
+{% block title1 %}Диаграммы масла{% endblock %}
+
+{% block content %}
+<section class="section_patterns">
+    <div class="container">
+        <div class="patterns_news">
+            <div class="patterns_cards">
+                {% for img in patterns %}
+                <a href="{{ img.img.url }}" class="pattern_link">
+                    <div class="patterns_card">
+                        <img src="{{ img.img.url }}" alt="Диаграмма масла">
+                        <p>{{ img.number }} диаграмма</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'main/JS/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'main/JS/img.js' %}"></script>
+{% endblock %}
