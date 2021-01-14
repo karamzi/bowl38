@@ -55,15 +55,16 @@ class RatingAdmin(admin.ModelAdmin):
     readonly_fields = ('league', 'place')
 
 
+class OnlineRegistrationsAdmin(admin.TabularInline):
+    model = OnlineRegistrations
+    extra = 1
+
+
 class TournamentAdmin(admin.ModelAdmin):
     list_display = ('tittle', 'description', 'pattern', 'status_registrations', 'show', 'date')
     list_display_links = ('tittle', 'description', 'pattern', 'status_registrations', 'show')
     search_fields = ('title',)
-
-
-class OnlineRegistrationsAdmin(admin.ModelAdmin):
-    list_display = ('tournament', 'group', 'name')
-    list_display_links = ('tournament', 'group', 'name')
+    inlines = [OnlineRegistrationsAdmin]
 
 
 admin.site.register(Documents, DocumentsAdmin)
@@ -73,4 +74,3 @@ admin.site.register(ImgNews, ImgNewsAdmin)
 admin.site.register(Patterns, PatternsAdmin)
 admin.site.register(RatingModel, RatingAdmin)
 admin.site.register(Tournaments, TournamentAdmin)
-admin.site.register(OnlineRegistrations, OnlineRegistrationsAdmin)

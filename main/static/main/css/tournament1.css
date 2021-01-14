@@ -206,6 +206,7 @@ header:after {
     text-align: center;
     color: white;
     font-size: 25px;
+    width: 65%;
     text-transform: uppercase;
 }
 
