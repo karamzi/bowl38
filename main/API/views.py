@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -65,9 +66,17 @@ class OnlineRegistrationsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        if not OnlineRegistrations.objects.filter(tournament=request.POST['id'],
-                                                  name=request.user.first_name + ' ' + request.user.last_name).exists():
-            if OnlineRegistrations.objects.filter(group=request.POST['group']).count() < 16:
+        tournament = Tournaments.objects.get(pk=request.POST['id'])
+        if request.POST['group'] == '1':
+            max_people = tournament.first_group
+        elif request.POST['group'] == '2':
+            max_people = tournament.second_group
+        else:
+            max_people = tournament.third_group
+        if not tournament.list_players.filter(Q(name=request.user.first_name + ' ' + request.user.last_name) |
+                                              Q(name=request.user.last_name + ' ' + request.user.first_name[0]) |
+                                              Q(name=request.user.last_name)).exists():
+            if tournament.list_players.filter(group=request.POST['group']).count() < max_people:
                 player = OnlineRegistrations()
                 player.tournament_id = request.POST['id']
                 player.name = request.user.first_name + ' ' + request.user.last_name
@@ -90,8 +99,10 @@ class OnlineRegistrationsView(APIView):
 
     def delete(self, request):
         try:
-            player = OnlineRegistrations.objects.get(tournament=request.GET['id'],
-                                                     name=request.user.first_name + ' ' + request.user.last_name)
+            player = OnlineRegistrations.objects.get(Q(name=request.user.first_name + ' ' + request.user.last_name) |
+                                                     Q(name=request.user.last_name + ' ' + request.user.first_name[0]) |
+                                                     Q(name=request.user.last_name),
+                                                     tournament=request.GET['id'])
             player.delete()
             return Response({
                 'status': 200,

@@ -313,7 +313,6 @@ header:after {
     justify-content: space-around;
     margin-top: 30px;
     flex-wrap: wrap;
-    padding: 0 10px;
 }
 
 .tournaments_card {
@@ -323,7 +322,8 @@ header:after {
     transition: all 0.3s ease;
     color: white;
     width: 30%;
-    max-width: 400px;
+    min-width: 350px;
+    margin-bottom: 15px;
 }
 
 .tournaments_card:after {
@@ -944,6 +944,12 @@ header:after {
         width: 150px;
         background-color: rgba(0, 0, 0, 0.9);
     }
+
+    /* tournament
+     =====================*/
+    .tournaments_card {
+        width: 48%;
+    }
 }
 
 @media (max-width: 625px) {
@@ -1010,12 +1016,17 @@ header:after {
     }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 400px) {
     /* tournaments
      ===================*/
+    .tournaments_cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .tournaments_card {
-        width: 90%;
-        margin: 0 auto 20px auto;
+        width: 95%;
+        min-width: 300px;
     }
 
     .table_col {
