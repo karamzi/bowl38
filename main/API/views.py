@@ -204,6 +204,30 @@ class Reply(APIView):
             })
 
 
+class BotAPI(APIView):
+
+    def get(self, request):
+        groups = []
+        tournament = Tournaments.objects.first()
+        if tournament.list_players.filter(group=1).count() < tournament.first_group:
+            groups.append('1')
+        if tournament.list_players.filter(group=2).count() < tournament.second_group:
+            groups.append('2')
+        if tournament.list_players.filter(group=3).count() < tournament.third_group:
+            groups.append('3')
+        return Response({
+            'groups': groups
+        })
+
+    def post(self, request):
+        tournament = Tournaments.objects.first()
+        reg_player = OnlineRegistrations(tournament=tournament, group=request.POST['group'], name=request.POST['name'])
+        reg_player.save()
+        return Response({
+            'text': 'Игрок был успешно зарегестрирован'
+        })
+
+
 class NewsCommentView(Comment):
     model = CommentsModel
 
