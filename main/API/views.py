@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -207,25 +208,45 @@ class Reply(APIView):
 class BotAPI(APIView):
 
     def get(self, request):
-        groups = []
         tournament = Tournaments.objects.first()
-        if tournament.list_players.filter(group=1).count() < tournament.first_group:
-            groups.append('1')
-        if tournament.list_players.filter(group=2).count() < tournament.second_group:
-            groups.append('2')
-        if tournament.list_players.filter(group=3).count() < tournament.third_group:
-            groups.append('3')
+
         return Response({
-            'groups': groups
+            'groups': self.get_groups(tournament)
         })
 
     def post(self, request):
         tournament = Tournaments.objects.first()
-        reg_player = OnlineRegistrations(tournament=tournament, group=request.POST['group'], name=request.POST['name'])
-        reg_player.save()
-        return Response({
-            'text': 'Игрок был успешно зарегестрирован'
-        })
+        if request.POST['group'] == '1':
+            max_people = tournament.first_group
+        elif request.POST['group'] == '2':
+            max_people = tournament.second_group
+        else:
+            max_people = tournament.third_group
+        if tournament.list_players.filter(group=request.POST['group']).count() < max_people:
+            player = OnlineRegistrations()
+            player.tournament = tournament
+            player.name = request.POST['name']
+            player.group = request.POST['group']
+            player.save()
+            return Response({
+                'status': '1',
+                'groups': self.get_groups(tournament)
+            })
+        else:
+            return Response({
+                'status': '0',
+                'groups': self.get_groups(tournament),
+            })
+
+    @staticmethod
+    def get_groups(tournament):
+        group_1 = tournament.list_players.filter(group=1).count()
+        group_1_max = tournament.first_group
+        group_2 = tournament.list_players.filter(group=2).count()
+        group_2_max = tournament.second_group
+        group_3 = tournament.list_players.filter(group=3).count()
+        group_3_max = tournament.third_group
+        return f'1 группа {group_1}/{group_1_max}\n2 группа {group_2}/{group_2_max}\n3 группа {group_3}/{group_3_max}'
 
 
 class NewsCommentView(Comment):
