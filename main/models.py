@@ -145,7 +145,7 @@ class Tournaments(models.Model):
     status_registrations = models.BooleanField(verbose_name='Открыть регистрацию?', choices=STATUS, default=False)
     date = models.DateField(verbose_name='Дата')
     show = models.BooleanField(verbose_name='Показывать турнир на главной?', choices=STATUS, default=False)
-    regulations = models.FileField(verbose_name='Регламент', upload_to=get_regulations_path)
+    regulations = models.FileField(verbose_name='Регламент', upload_to=get_regulations_path, blank=True, null=True)
     first_group = models.SmallIntegerField(verbose_name='Участников в первой группе', default=14)
     second_group = models.SmallIntegerField(verbose_name='Участников во второй группе', default=14)
     third_group = models.SmallIntegerField(verbose_name='Участников в третьей группе', default=14)
